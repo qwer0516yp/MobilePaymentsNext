@@ -1,4 +1,4 @@
-namespace Blazr.Demo.Toaster;
+namespace Blazor.Demo.Toaster;
 
 public enum MessageColour
 {
