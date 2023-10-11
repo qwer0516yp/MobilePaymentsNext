@@ -1,6 +1,6 @@
 using System.Timers;
 
-namespace Blazr.Demo.Toaster;
+namespace Blazor.Demo.Toaster;
 
 public class ToasterService : IDisposable
 {

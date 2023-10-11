@@ -1,5 +1,5 @@
 using BlazorWebAssembly;
-using Blazr.Demo.Toaster;
+using Blazor.Demo.Toaster;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
