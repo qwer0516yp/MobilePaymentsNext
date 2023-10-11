@@ -1,0 +1,64 @@
+﻿@page "/Hexifier"
+@using Blazor.Demo.Toaster;
+
+<h3>Hexifier</h3>
+
+<form class="was-validated">
+	<div class="shadow-none p-3 mb-5 bg-light rounded">
+		<h3>Hexify a Base64String</h3>
+		<div class="form-row">
+			<div class="mb-3">
+				<span><label for="base64Input">Base64String:</label></span>
+				<textarea class="@userInputClass" id="base64Input" placeholder="paste in your Base64 string value here" @bind="@base64UserInput" required></textarea>
+				<input class="form-control" id="base64InputInUtf8" placeholder="your input will be converted into bytes, then the bytes as UTF-8 string will be displayed here" @bind="@Utf8Base64userInput" readonly></input>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="mb-3">
+		<button type="button" class="btn btn-outline-warning" id="hexifyBtn" @onclick="HexifyFromBase64String">Hexify From Base 64 string</button>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="mb-3">
+				<label for="hexifiedOutput">Hexified String:</label>
+				<textarea class="form-control" id="hexifiedOutput" placeholder="hexified string value" @bind="@hexifiedOutput" readonly></textarea>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- my Bootstrap Toaster -->
+<Toaster />
+
+@code {
+
+	public string base64UserInput;
+	public string Utf8Base64userInput;
+	public string hexifiedOutput;
+
+	private string userInputClass => IsValid ? "form-control" : "form-control is-invalid";
+	private bool IsValid;
+
+	private void HexifyFromBase64String()
+	{
+		try
+		{
+			var bytes = Convert.FromBase64String(base64UserInput);
+			Utf8Base64userInput = System.Text.Encoding.UTF8.GetString(bytes);
+			hexifiedOutput = Convert.ToHexString(bytes);
+			IsValid = true;
+			toasterService.AddToast(Toast.NewToast("Success", $"{base64UserInput} is hexified to {hexifiedOutput}", MessageColour.Success, 10));
+		}
+		catch (Exception e)
+		{
+			IsValid = false;
+			Utf8Base64userInput = string.Empty;
+			hexifiedOutput = string.Empty;
+			toasterService.AddToast(Toast.NewToast("Error", "Please check your input Base64String and try again!", MessageColour.Danger, 10));
+		}
+	}
+
+	[Inject] private ToasterService? _toasterService { get; set; }
+
+	private ToasterService toasterService => _toasterService!;
+}
